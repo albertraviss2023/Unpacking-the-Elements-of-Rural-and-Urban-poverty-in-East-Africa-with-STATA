@@ -1,18 +1,18 @@
 /*******************************************************************************
 Purpose: 		    Run main file to compute poverty  variables then tabulate and 
-                    export results. 
-Datasets:	       	all the 3 coded PR_HRcoded.dta files (one by one)
+                            export results. 
+Datasets:	            all the 3 coded PR_HRcoded.dta files (one by one)
 Author:				Albert Lutakome			
 Date last modified: September 22, 2023  by Albert Lutakome
 
 Instructions:
- globar macros: $path_in and $path_out
+ global macros: $path_in and $path_out
 ********************************************************************************/
   *** SETTING WORKING PATHS 
 ********************************************************************************
 *** Working Folder Path ***
-global path_in "C:\Users\alber\OneDrive\Documents\Github Projects\Project10 Urban Povery Computation with STATA" 
-global path_out "C:\Users\alber\OneDrive\Documents\Github Projects\Project10 Urban Povery Computation with STATA\outdata"
+global path_in "C:\Users\..\EA Povery Computation" 
+global path_out "C:\Users\..\EA Povery Computation\outdata"
 
 ********************************************************************************/
  *** CODING POVERTY VARIABLES AND RELEVANT SOCIAL-DEMOGRAPHIC VARIABLES
