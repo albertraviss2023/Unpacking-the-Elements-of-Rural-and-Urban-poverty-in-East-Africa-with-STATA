@@ -19,7 +19,7 @@ global path_out "C:\Users\..\EA Povery Computation\outdata"
  ** This is done by running the relevant file below. 
 ********************************************************************************
 
-do urban_rural_pov_in_east_africa.do
+do poverty_indicators_in_east_africa.do
 
 *****************************************************************************
 *** TABULATIONS AND RESULTS EXPORTATION
