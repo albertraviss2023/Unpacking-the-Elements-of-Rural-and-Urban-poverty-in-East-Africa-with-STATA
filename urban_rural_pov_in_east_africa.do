@@ -1,7 +1,7 @@
 /*******************************************************************************
-Purpose: 		    Code poverty by residence, gender, and deprivation types,
-                    Householdheadship.
-                    in 3 East african countries (Uganda, kenya and Tanania).  
+Purpose:            Code poverty by residence, gender, and deprivation types,
+                    Household headship.
+                    in 3 East african countries (Uganda, Kenya and Tanzania).  
 Datasets:	       	PR  merged with HR files
 Author:				Albert Lutakome			
 Date last modified: September 22, 2023  by Albert Lutakome
