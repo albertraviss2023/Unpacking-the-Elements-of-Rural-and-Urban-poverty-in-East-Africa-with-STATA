@@ -126,7 +126,7 @@ label var floor "Household floor made of durable material"
 recode hv214 (11/28 96/99=0 "No") (31/36=1 "Yes"), gen(wall)
 label var wall "Household wall made of durable material"
 
-* roof materal
+* roof material
 recode hv215 (11/26 96/99=0 "No") (31/39=1 "Yes"), gen(roof)
 label var wall "Household roof made of durable material"
 
@@ -323,24 +323,7 @@ tab hv101 relationship, miss
 clonevar gender = hv104 
 label var gender "Sex of household member"
 
-/* Household headship version1: Just for triangulation with household_head
-bys	hhid: egen hhead = min(relationship)
-tab hhead,m 
-gen household_head=.
-replace household_head=1 if relationship==1 & gender==1 
-replace household_head=2 if relationship==1 & gender==2
-bysort hhid: egen headship = sum(household_head)
-replace headship = 1 if (hhead==2 & gender==1)
-replace headship = 2 if (hhead==2 & gender==2)
-replace headship = 0 if hhead>2
-
-label define head 1 "male-headed" 2 "female-headed"
-label values headship head
-label var headship "Household headship"
-tab headship, miss
-                                                                              */
-
-//Household headship version 2
+//Household headship 
 gen hhhead_male  =0
 gen hhhead_female=0
 gen spouse=0
