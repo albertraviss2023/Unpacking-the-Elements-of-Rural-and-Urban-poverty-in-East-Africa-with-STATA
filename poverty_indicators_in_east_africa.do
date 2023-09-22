@@ -232,7 +232,9 @@ replace pair_wise_poor =5 if lack_water_living_spce ==1
 replace pair_wise_poor =6 if lack_house_living_spce ==1
 
 lab var pair_wise_poor "Two Deprivations Combinations"
-lab define pair_wise 1 "improved toilet and water" 2 "improved toilet and durable house" 3 "lacks improved toilet and living space" 4 "improved water and durable house" 5 "improved water and living space" 6 "durable house and living space" 
+lab define pair_wise 1 "improved toilet and water" 2 "improved toilet and durable house" /// 
+3 "lacks improved toilet and living space" 4 "improved water and durable house" ///
+5 "improved water and living space" 6 "durable house and living space" 
 label values  pair_wise_poor pair_wise
 
 tab pair_wise_poor poverty, missing
@@ -253,22 +255,26 @@ n is the total number of items and r is the number of items to be chosen, hence 
 
 *lack improved_toilet improved_water and durable_house - ABC
 gen lack_toilet_water_house = 0
-replace lack_toilet_water_house  = 1 if improved_toilet==0 & improved_water ==0 & durable_house ==0 & tri_poor==1
+replace lack_toilet_water_house  = 1 if improved_toilet==0 & improved_water ==0 ///
+& durable_house ==0 & tri_poor==1
 lab var lack_toilet_water_house "toilet, water and durable house"
 
 **lack improved_toilet improved_water and living_spce - ABD
 gen lack_toilet_water_living_spce = 0
-replace lack_toilet_water_living_spce  = 1 if improved_toilet==0 & improved_water ==0 & living_spce ==0 & tri_poor==1
+replace lack_toilet_water_living_spce  = 1 if improved_toilet==0 & improved_water ==0 ///
+& living_spce ==0 & tri_poor==1
 lab var lack_toilet_water_living_spce "toilet, water and living space"
 
 **lack improved_water,durable_house and  living_spce - BCD
 gen lack_water_house_living_spce = 0
-replace lack_water_house_living_spce = 1 if improved_water ==0 & durable_house ==0 & living_spce ==0 & tri_poor==1
+replace lack_water_house_living_spce = 1 if improved_water ==0 & durable_house ==0 ///
+& living_spce ==0 & tri_poor==1
 lab var lack_water_house_living_spce "water, durable house  and living space"
 
 **lack durable_house,  living_spce and improved_toilet   - CDA
 gen lack_house_living_spce_toilet = 0
-replace lack_house_living_spce_toilet = 1 if durable_house ==0 & living_spce ==0 & improved_toilet==0  & tri_poor==1
+replace lack_house_living_spce_toilet = 1 if durable_house ==0 & living_spce ==0 ///
+& improved_toilet==0  & tri_poor==1
 lab var lack_house_living_spce_toilet "durable house, living space and toilet"
 
 gen tripple_wise_poor = .
@@ -350,7 +356,10 @@ replace hhtype=7 if nhhhead_female==1 & nspouse==0 & nchild>0
 replace hhtype=8 if nhhhead_female==1 & nspouse==0 & nchild==0
 replace hhtype=9 if hhtype==.
 
-label define hhtype 1 "Male head with spouse and children" 2 "Male head with spouse, no children" 3 "Male head, no spouse, and children" 4 "Male head, no spouse, no children" 5 "Female head with spouse and children" 6 "Female head with spouse, no children" 7 "Female head, no spouse, and children" 8 "Female head, no spouse, no children" 9 "Other"
+label define hhtype 1 "Male head with spouse and children" 2 "Male head with spouse, no children" ///
+3 "Male head, no spouse, and children" 4 "Male head, no spouse, no children" ///
+5 "Female head with spouse and children" 6 "Female head with spouse, no children" ///
+7 "Female head, no spouse, and children" 8 "Female head, no spouse, no children" 9 "Other"
 label values hhtype hhtype
 label var hhtype "Household structure"
 
