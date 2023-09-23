@@ -1,4 +1,4 @@
-# Unveiling-the-Elements-of-Rural-and-Urban-poverty-in-East-Africa-with-STATA
+# Unpacking-the-Elements-of-Rural-and-Urban-poverty-in-East-Africa-with-STATA
 
 # Readme 
 
