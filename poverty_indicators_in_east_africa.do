@@ -176,24 +176,22 @@ label var poor_hh "Household poverty based on key deprivations"
 ********************************************************************************
 gen pov_threshold = . 
 replace pov_threshold = 1 if poverty == 1 
-replace pov_threshold = 2 if poverty == 1
-replace pov_threshold = 3 if poverty == 1 
-replace pov_threshold = 4 if poverty == 1 
+replace pov_threshold = 2 if poverty == 2
+replace pov_threshold = 3 if poverty == 3
+replace pov_threshold = 4 if poverty == 4
 
 label var pov_threshold "Poverty thresholds"
-label define pov_thresh 1 "" 2 "" 3 "" 4 ""
+label define pov_thresh 1 "One deprivation" 2 "Two deprivations" 3 "Three deprivations" ///
+4 "Four deprivations"
 label val pov_threshold pov_thresh
 
+*******************************************************************************
+***DEPRIVATION COMBINATIONS
+*******************************************************************************
 *********************************************************
 * Single Deprivations for poverty == 1
 * Single  combinations: there are 4C1 = 4!/1!3! = 4
-********************************************************
-**  
- gen one_wise_poor = 0
- replace one_wise_poor  = 1 if poverty == 1
- lab var one_wise_poor  "Household lacks one deprivation"
- tab one_wise_poor poverty, missing 
-                               
+********************************************************                     
 *lack improved_toilet improved_water - A
 gen lack_toilet_only = 0
 replace lack_toilet_only = 1 if improved_toilet == 1 & poverty == 1
@@ -212,9 +210,6 @@ replace lack_living_only = 1 if living_spce == 1 & poverty == 1
 *******************************************************************************
 ** Pairwise deprivations: => poverty == 2
 *******************************************************************************
- gen pair_poor = 0
- replace pair_poor = 1 if poverty == 2 
- lab var pair_poor "Pairwise deprivations"
 
  /* Pairwise combinations: there are 4C2 = 4!/2!2! = 6 pairs that can be generated
 *** our list improved_toilet improved_water durable_house living_spce if pair_poor==1
@@ -264,17 +259,13 @@ tab pair_wise_poor poverty, missing
 ************************************************************************************
  ** Tripple deprivations poverty: Having 3 deprivations  =>poverty == 3
  **********************************************************************************
- gen tri_poor = 0
- replace tri_poor = 1 if poverty == 3
- lab var tri_poor "Tripple deprivations"
  
  /* Poverty by 3 deprivations: since the order doesnt matter, This is combination,
 n is the total number of items and r is the number of items to be chosen, hence 4C3
 => there are = n!/(r!(n-r)!) = 4!/(3!(4-3)!) = = 24/(6*1) = 4 combinations. 
 *** our list improved_toilet improved_water durable_house living_spce if tri_poor==1
 -                  A            B                  C         D
--The combos are: ABC,ABD,BCD,CDA.                                             */ 
-                                     
+-The combos are: ABC,ABD,BCD,CDA.                                             */                        
 
 *lack improved_toilet improved_water and durable_house - ABC
 gen lack_toilet_water_house = 0
@@ -393,8 +384,8 @@ label var age "Age of household member"
 *keep only variables you need
 keep hv000-hv027 hv012 hv013 weight area gender age toilet improved_toilet ///
 water improved_water  floor wall roof durable_house room_space living_spce poverty ///
-poor_hh relationship hhtype household_head pair_poor tri_poor lack_* filename ///
-one_wise_poor pair_wise_poor tripple_wise_poor quadro_wise_poor
+hhtype household_head   lack_*  poor_hh pov_threshold  ///
+one_wise_poor pair_wise_poor tripple_wise_poor quadro_wise_poor filename
  
 save "$path_out//`cn'PR_HRcoded.dta", replace
   }
