@@ -171,17 +171,46 @@ label define poor_hh 0 "non-poor" 1 "poor"
 label values poor_hh poor_hh
 label var poor_hh "Household poverty based on key deprivations"
 
+********************************************************************************
+*** Grouping all deprivation thresholds ***
+********************************************************************************
+gen pov_threshold = . 
+replace pov_threshold = 1 if poverty == 1 
+replace pov_threshold = 2 if poverty == 1
+replace pov_threshold = 3 if poverty == 1 
+replace pov_threshold = 4 if poverty == 1 
 
-*****************
-* One deprivation: 
-***************
+label var pov_threshold "Poverty thresholds"
+label define pov_thresh 1 "" 2 "" 3 "" 4 ""
+label val pov_threshold pov_thresh
+
+*********************************************************
+* Single Deprivations for poverty == 1
+* Single  combinations: there are 4C1 = 4!/1!3! = 4
+********************************************************
 **  
  gen one_wise_poor = 0
  replace one_wise_poor  = 1 if poverty == 1
  lab var one_wise_poor  "Household lacks one deprivation"
  tab one_wise_poor poverty, missing 
+                               
+*lack improved_toilet improved_water - A
+gen lack_toilet_only = 0
+replace lack_toilet_only = 1 if improved_toilet == 1 & poverty == 1
+
+*lack improved_water only  - B
+gen lack_water_only = 0
+replace lack_water_only = 1 if improved_water == 1 & poverty == 1
+
+*lack durable_house  only  - C
+gen lack_house_only = 0
+replace lack_house_only = 1 if durable_house == 1 & poverty == 1
+
+*lack Living space  only  - D
+gen lack_living_only = 0
+replace lack_living_only = 1 if living_spce == 1 & poverty == 1
 *******************************************************************************
-** Pairwise poverty: having 2 deprivations
+** Pairwise deprivations: => poverty == 2
 *******************************************************************************
  gen pair_poor = 0
  replace pair_poor = 1 if poverty == 2 
@@ -190,38 +219,31 @@ label var poor_hh "Household poverty based on key deprivations"
  /* Pairwise combinations: there are 4C2 = 4!/2!2! = 6 pairs that can be generated
 *** our list improved_toilet improved_water durable_house living_spce if pair_poor==1
 -                  A            B                  C         D
--The pairs are: AB, AC, AD, BC , BD, CD.                                     */
-
-                                    
+-The combos are: AB, AC, AD, BC , BD, CD.                                     */
+                           
 *lack improved_toilet improved_water - AB
 gen lack_toilet_water = 0
-replace lack_toilet_water  = 1 if improved_toilet==0 & improved_water ==0 &  pair_poor==1
-lab var lack_toilet_water "Household lacks improved toilet and water"
+replace lack_toilet_water  = 1 if improved_toilet==1 & improved_water ==1 &  poverty == 2 
 
 *lack improved_toilet & durable_house - AC
 gen lack_toilet_house =0
-replace lack_toilet_house = 1 if improved_toilet==0 & durable_house ==0 &  pair_poor==1
-lab var lack_toilet_house "Household lacks improved toilet and durable house"
+replace lack_toilet_house = 1 if improved_toilet==1 & durable_house ==1 &  poverty == 2 
 
 *lack improved_toilet and living_spce - AD
 gen lack_toilet_living_spce =0
-replace lack_toilet_living_spce = 1 if improved_toilet==0 & living_spce ==0 &  pair_poor==1
-lab var lack_toilet_living_spce "Household lacks improved toilet and living space"
+replace lack_toilet_living_spce = 1 if improved_toilet==1 & living_spce ==1 &  poverty == 2 
 
 *lack improved water and durable house - BC
 gen lack_water_house =0
-replace lack_water_house = 1 if improved_water ==0 & durable_house==0 &  pair_poor==1
-lab var lack_water_house "Household lacks improved water and durable house"
+replace lack_water_house = 1 if improved_water ==1 & durable_house==1 &  poverty == 2 
 
-*lack improved water and and living_spce - BD
+*lack improved water and living_spce - BD
 gen lack_water_living_spce =0
-replace lack_water_living_spce = 1 if improved_water ==0 & living_spce==0 &  pair_poor==1
-lab var lack_water_living_spce "Household lacks improved water and living space"
+replace lack_water_living_spce = 1 if improved_water ==1 & living_spce==1 &  poverty == 2 
 
 *lack durable house and living_spce - CD
 gen lack_house_living_spce =0
-replace lack_house_living_spce = 1 if durable_house==0 & living_spce==0 &  pair_poor==1
-lab var lack_house_living_spce "Household lacks durable house and living space"
+replace lack_house_living_spce = 1 if durable_house==1 & living_spce==1 &  poverty == 2 
 
 gen pair_wise_poor = .
 replace pair_wise_poor =1 if lack_toilet_water ==1
@@ -240,7 +262,7 @@ label values  pair_wise_poor pair_wise
 tab pair_wise_poor poverty, missing
 
 ************************************************************************************
- ** Tripple deprivations poverty: Having 3 deprivations
+ ** Tripple deprivations poverty: Having 3 deprivations  =>poverty == 3
  **********************************************************************************
  gen tri_poor = 0
  replace tri_poor = 1 if poverty == 3
@@ -251,31 +273,24 @@ n is the total number of items and r is the number of items to be chosen, hence 
 => there are = n!/(r!(n-r)!) = 4!/(3!(4-3)!) = = 24/(6*1) = 4 combinations. 
 *** our list improved_toilet improved_water durable_house living_spce if tri_poor==1
 -                  A            B                  C         D
--The combos are: ABC,ABD,BCD,CDA.                                             */                                      
+-The combos are: ABC,ABD,BCD,CDA.                                             */ 
+                                     
 
 *lack improved_toilet improved_water and durable_house - ABC
 gen lack_toilet_water_house = 0
-replace lack_toilet_water_house  = 1 if improved_toilet==0 & improved_water ==0 ///
-& durable_house ==0 & tri_poor==1
-lab var lack_toilet_water_house "toilet, water and durable house"
+replace lack_toilet_water_house  = 1 if improved_toilet==1 & improved_water ==1& durable_house ==1 & poverty == 3
 
 **lack improved_toilet improved_water and living_spce - ABD
 gen lack_toilet_water_living_spce = 0
-replace lack_toilet_water_living_spce  = 1 if improved_toilet==0 & improved_water ==0 ///
-& living_spce ==0 & tri_poor==1
-lab var lack_toilet_water_living_spce "toilet, water and living space"
+replace lack_toilet_water_living_spce  = 1 if improved_toilet==1 & improved_water ==1 & living_spce ==1 & poverty == 3
 
 **lack improved_water,durable_house and  living_spce - BCD
 gen lack_water_house_living_spce = 0
-replace lack_water_house_living_spce = 1 if improved_water ==0 & durable_house ==0 ///
-& living_spce ==0 & tri_poor==1
-lab var lack_water_house_living_spce "water, durable house  and living space"
+replace lack_water_house_living_spce = 1 if improved_water ==1 & durable_house ==1 & living_spce ==1 & poverty == 3
 
 **lack durable_house,  living_spce and improved_toilet   - CDA
 gen lack_house_living_spce_toilet = 0
-replace lack_house_living_spce_toilet = 1 if durable_house ==0 & living_spce ==0 ///
-& improved_toilet==0  & tri_poor==1
-lab var lack_house_living_spce_toilet "durable house, living space and toilet"
+replace lack_house_living_spce_toilet = 1 if durable_house ==1 & living_spce ==1 & improved_toilet==1  & poverty == 3
 
 gen tripple_wise_poor = .
 replace tripple_wise_poor =1 if lack_toilet_water_house ==1
@@ -290,12 +305,16 @@ lab define tripple_wise 1 "improved toilet, water and durable house" ///
 label values tripple_wise_poor tripple_wise
 
 tab tripple_wise_poor poverty, missing
+
+**********************************************************************
 ** All 4 deprivatisons poverty:  Here 4C4 = 4!/(4!1!) =1 
+*********************************************************************
  gen quadro_wise_poor = 0
  replace quadro_wise_poor  = 1 if poverty == 4 
  lab var quadro_wise_poor  "Household lacks all four deprivations"
 
 tab quadro_wise_poor poverty, missing
+
 ********************************************************************************
 *** Step 1.2 CODING DEMOGRAPHIC VARIABLES ***
 ********************************************************************************
