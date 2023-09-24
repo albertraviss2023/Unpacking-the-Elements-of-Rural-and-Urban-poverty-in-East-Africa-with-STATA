@@ -191,22 +191,38 @@ label val pov_threshold pov_thresh
 *********************************************************
 * Single Deprivations for poverty == 1
 * Single  combinations: there are 4C1 = 4!/1!3! = 4
-********************************************************                     
+********************************************************   
+                  
 *lack improved_toilet improved_water - A
 gen lack_toilet_only = 0
-replace lack_toilet_only = 1 if improved_toilet == 1 & poverty == 1
+replace lack_toilet_only = 1 if improved_toilet == 0 & poverty == 1
 
 *lack improved_water only  - B
 gen lack_water_only = 0
-replace lack_water_only = 1 if improved_water == 1 & poverty == 1
+replace lack_water_only = 1 if improved_water == 0 & poverty == 1
 
 *lack durable_house  only  - C
 gen lack_house_only = 0
-replace lack_house_only = 1 if durable_house == 1 & poverty == 1
+replace lack_house_only = 1 if durable_house == 0 & poverty == 1
 
 *lack Living space  only  - D
 gen lack_living_only = 0
-replace lack_living_only = 1 if living_spce == 1 & poverty == 1
+replace lack_living_only = 1 if living_spce == 0 & poverty == 1
+
+* grouping the single deprivation combinations
+
+gen one_wise_poor = .
+replace one_wise_poor =1 if lack_toilet_only ==1
+replace one_wise_poor =2 if lack_water_only  ==1
+replace one_wise_poor =3 if lack_house_only  ==1
+replace one_wise_poor =4 if lack_living_only ==1
+
+lab var one_wise_poor "Single Deprivations Combinations"
+lab define one_wise_poor 1 "toilet" /// 
+2 "water" 3 "durable house" 4 "living space" 
+
+label values one_wise_poor one_wise_poor
+
 *******************************************************************************
 ** Pairwise deprivations: => poverty == 2
 *******************************************************************************
@@ -218,27 +234,27 @@ replace lack_living_only = 1 if living_spce == 1 & poverty == 1
                            
 *lack improved_toilet improved_water - AB
 gen lack_toilet_water = 0
-replace lack_toilet_water  = 1 if improved_toilet==1 & improved_water ==1 &  poverty == 2 
+replace lack_toilet_water  = 1 if improved_toilet==0 & improved_water ==0 &  poverty == 2 
 
 *lack improved_toilet & durable_house - AC
 gen lack_toilet_house =0
-replace lack_toilet_house = 1 if improved_toilet==1 & durable_house ==1 &  poverty == 2 
+replace lack_toilet_house = 1 if improved_toilet==0 & durable_house ==0 &  poverty == 2 
 
 *lack improved_toilet and living_spce - AD
 gen lack_toilet_living_spce =0
-replace lack_toilet_living_spce = 1 if improved_toilet==1 & living_spce ==1 &  poverty == 2 
+replace lack_toilet_living_spce = 1 if improved_toilet==0 & living_spce ==0 &  poverty == 2 
 
 *lack improved water and durable house - BC
 gen lack_water_house =0
-replace lack_water_house = 1 if improved_water ==1 & durable_house==1 &  poverty == 2 
+replace lack_water_house = 1 if improved_water ==0 & durable_house==0 &  poverty == 2 
 
 *lack improved water and living_spce - BD
 gen lack_water_living_spce =0
-replace lack_water_living_spce = 1 if improved_water ==1 & living_spce==1 &  poverty == 2 
+replace lack_water_living_spce = 1 if improved_water ==0 & living_spce==0 &  poverty == 2 
 
 *lack durable house and living_spce - CD
 gen lack_house_living_spce =0
-replace lack_house_living_spce = 1 if durable_house==1 & living_spce==1 &  poverty == 2 
+replace lack_house_living_spce = 1 if durable_house==0 & living_spce==0 &  poverty == 2 
 
 gen pair_wise_poor = .
 replace pair_wise_poor =1 if lack_toilet_water ==1
@@ -269,19 +285,19 @@ n is the total number of items and r is the number of items to be chosen, hence 
 
 *lack improved_toilet improved_water and durable_house - ABC
 gen lack_toilet_water_house = 0
-replace lack_toilet_water_house  = 1 if improved_toilet==1 & improved_water ==1& durable_house ==1 & poverty == 3
+replace lack_toilet_water_house  = 1 if improved_toilet==0 & improved_water ==0 & durable_house ==0 & poverty == 3
 
 **lack improved_toilet improved_water and living_spce - ABD
 gen lack_toilet_water_living_spce = 0
-replace lack_toilet_water_living_spce  = 1 if improved_toilet==1 & improved_water ==1 & living_spce ==1 & poverty == 3
+replace lack_toilet_water_living_spce  = 1 if improved_toilet==0 & improved_water ==0 & living_spce ==0 & poverty == 3
 
 **lack improved_water,durable_house and  living_spce - BCD
 gen lack_water_house_living_spce = 0
-replace lack_water_house_living_spce = 1 if improved_water ==1 & durable_house ==1 & living_spce ==1 & poverty == 3
+replace lack_water_house_living_spce = 1 if improved_water ==0 & durable_house ==0 & living_spce ==0 & poverty == 3
 
 **lack durable_house,  living_spce and improved_toilet   - CDA
 gen lack_house_living_spce_toilet = 0
-replace lack_house_living_spce_toilet = 1 if durable_house ==1 & living_spce ==1 & improved_toilet==1  & poverty == 3
+replace lack_house_living_spce_toilet = 1 if durable_house ==0 & living_spce ==0 & improved_toilet==0  & poverty == 3
 
 gen tripple_wise_poor = .
 replace tripple_wise_poor =1 if lack_toilet_water_house ==1
